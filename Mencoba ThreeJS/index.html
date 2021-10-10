@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mencoba three.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    
+</body>
+</html>
+
+<script>    
+        let scene, camera, renderer, cube, cone, sphere, torus, octahedron, extrude, circle, cilinder, tetrahedron, lathe;
+        let objects = [];
+
+        // create cube, basic material, wireframe
+        let createCube = function() {
+            let geometry = new THREE.BoxGeometry(10, 10, 10);
+            let material = new THREE.MeshBasicMaterial({color: "#03fca5", wireframe: true});
+            cube = new THREE.Mesh(geometry, material);
+            cube.position.set(-46, 18, 0);
+            scene.add(cube);
+            objects.push(cube);
+        }
+
+        // create cone, lambert material, wireframe
+        let createCone = function() {
+            let geometry = new THREE.ConeGeometry(8, 15, 15);
+            let material = new THREE.MeshLambertMaterial({color: 'black', emissive: 'purple', wireframe: true});
+            cone = new THREE.Mesh(geometry, material);
+            cone.position.set(-46, -15, 0);
+            scene.add(cone);
+            objects.push(cone);
+        }
+
+        // create sphere, phong material
+        let createSphere = function() {
+            let geometry = new THREE.SphereGeometry(7, 12, 10)
+            let material = new THREE.MeshPhongMaterial({color: 'black', emissive: 'coral', shininess: 150});
+            sphere = new THREE.Mesh(geometry, material);
+            sphere.position.set(25, 18, 0);
+            scene.add(sphere);
+            objects.push(sphere);
+        }
+
+        // create torus, toon material
+        let createTorus = function() {
+            let geometry = new THREE.TorusGeometry(5, 2, 8, 24);
+            let material = new THREE.MeshToonMaterial({color: 'black', emissive: 'mediumspringgreen'});
+            torus = new THREE.Mesh(geometry, material);
+            torus.position.set(0, 0, 0);
+            scene.add(torus);
+            objects.push(torus);
+        }
+
+        // create octahedron, toon material, wireframe
+        let createOctahedron = function() {
+            let geometry = new THREE.OctahedronGeometry(7, 2)
+            let material = new THREE.MeshToonMaterial({color: 'black', emissive: 'blue', wireframe: true});
+            octahedron = new THREE.Mesh(geometry, material);
+            octahedron.position.set(46, -16, 0);
+            scene.add(octahedron);
+            objects.push(octahedron);
+        }
+
+        //create extrude, standard material    
+        let createExtrude = function()  {
+            let shape = new THREE.Shape();
+            let x = 2.5;
+            let y = 5;
+            shape.moveTo(x - 2.5, y - 2.5);
+            shape.bezierCurveTo(x - 2.5, y - 2.5, x - 2, y, x, y);
+            shape.bezierCurveTo(x + 3, y, x + 3, y - 3.5, x + 3, y - 3.5);
+            shape.bezierCurveTo(x + 3, y - 5.5, x + 1.5, y - 7.7, x - 2.5, y - 9.5);
+            shape.bezierCurveTo(x - 6, y - 7.7, x - 8, y - 4.5, x - 8, y - 3.5);
+            shape.bezierCurveTo(x - 8, y - 3.5, x - 8, y, x - 5, y);
+            shape.bezierCurveTo(x - 3.5, y, x - 2.5, y - 2.5, x - 2.5, y - 2.5);
+
+            let extrudeSettings = {
+            steps: 2,  
+            depth: 2,  
+            bevelEnabled: true,  
+            bevelThickness: 1,  
+            bevelSize: 1,  
+            bevelSegments: 2,  
+            };
+
+            let geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            let material = new THREE.MeshStandardMaterial({emissive: 'red', roughness: 1, metalness: 1});
+            extrude = new THREE.Mesh(geometry, material);
+            extrude.position.set(0, 0, 0);
+            scene.add(extrude);
+            objects.push(extrude);
+        }
+
+        //create circle, basic material
+        let createCircle = function() {
+            let geometry = new THREE.CircleGeometry(7, 24);
+            let material = new THREE.MeshBasicMaterial({color: "#03fcf0"});
+            circle = new THREE.Mesh(geometry, material);
+            circle.position.set(-25, 18, 0);
+            scene.add(circle);
+            objects.push(circle);
+        }
+
+        //create cilinder, phong material
+        let createCilinder = function() {
+            let geometry = new THREE.CylinderGeometry(6, 6, 15, 15);
+            let material = new THREE.MeshPhongMaterial({color: 'black', emissive: 'chartreuse', shininess: 150});
+            cilinder = new THREE.Mesh(geometry, material);
+            cilinder.position.set(-25, -16, 0);
+            scene.add(cilinder);
+            objects.push(cilinder);
+        }
+
+        //create tetrahedron, physical material
+        let createTetrahedron = function() {
+            let geometry = new THREE.TetrahedronGeometry(7, 2);
+            let material = new THREE.MeshPhysicalMaterial({emissive: 'gold', roughness: 1, metalness: 1, clearcoat: 0.25, clearcoatRoughness: 0.25});
+            tetrahedron = new THREE.Mesh(geometry, material);
+            tetrahedron.position.set(25, -16, 0);
+            scene.add(tetrahedron);
+            objects.push(tetrahedron);
+        }
+
+        //create lathe, standard material, wireframe
+        let createLathe = function() {
+            let points = [];
+            for (let i = 0; i < 15; ++i) {
+                points.push(new THREE.Vector2(Math.sin(i * 0.2) * 3 + 3, (i - 5) * .8));
+            }
+            let geometry = new THREE.LatheGeometry(points);
+            let material = new THREE.MeshStandardMaterial({emissive: 'pink', roughness: 1, metalness: 1, wireframe: true});
+            lathe = new THREE.Mesh(geometry, material);
+            lathe.position.set(46, 16, 0);
+            scene.add(lathe);
+            objects.push(lathe);
+        }
+
+        // set up the environment - 
+        // initiallize scene, camera, objects and renderer
+        let init = function() {
+            // 1. create the scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color('black');
+            
+            // 2. create an locate the camera       
+            camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.set(0, 0, 100);
+
+            //ambient light
+            let ambientLight = new THREE.AmbientLight(0xFFFFFF, 1);
+            scene.add(ambientLight);
+
+            //hemisphere light
+            let hemisphereLight = new THREE.HemisphereLight(0xB1E1FF, 0xB97A20, 1);
+            scene.add(hemisphereLight);
+
+            //directional light
+            let directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+            directionalLight.position.set(0, -10, 0);
+            directionalLight.target.position.set(-5, 0, 0);
+            scene.add(directionalLight);
+            scene.add(directionalLight.target);
+
+            //point light
+            let pointLight = new THREE.PointLight(0xffffff, 1);
+            pointLight.position.set(100, 100, 0);
+            scene.add(pointLight);
+
+            //spot light
+            let spotLight = new THREE.SpotLight( 0xffffff );
+            spotLight.position.set( -100, -50, 0 );
+            spotLight.castShadow = true;
+            scene.add( spotLight );
+            
+            // 3. create an locate the object on the scene           
+            createCube();
+            createCone();
+            createSphere();
+            createTorus();
+            createOctahedron();
+            createExtrude();
+            createCircle();
+            createCilinder();
+            createTetrahedron();
+            createLathe();
+
+            // 4. create the renderer     
+            renderer = new THREE.WebGLRenderer();   
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            document.body.appendChild(renderer.domElement);
+          
+        };
+        
+        let dx = 0;
+        let dy = 0;
+        let speedx = 0.073;
+        let speedy = 0.073;
+
+        let mainLoop = function(time) {
+            if(dx >= 52 || dx <= -52) speedx = -speedx;
+            if(dy >= 20 || dy <= -20) speedy = -speedy;
+            
+            time *= 0.001;
+
+            objects.forEach((obj) => {
+                obj.rotation.y = time;
+            });
+
+            dx = dx + speedx;
+            extrude.position.set(dx, 0, 0);
+
+            dy = dy + speedy;
+            torus.position.set(0, dy, 0);
+            torus.rotation.x = time;
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(mainLoop);
+        };
+        
+        ///////////////////////////////////////////////
+        init();
+        mainLoop();
+</script>
